@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  curora-postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    container_name: curora-db
+    environment:
+      - POSTGRES_PASSWORD=harshal
+      - PGDATA=/data/postgres-curora
+    volumes:
+      - postgres-curora:/data/postgres-curora
+
+volumes:
+  postgres-curora:
