@@ -22,7 +22,7 @@ type Props = {
 export function UserToogle({ user }: Props) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p-[4px] flex items-center gap-1 rounded-sm border hover:bg-zinc-900 transition-all">
+      <DropdownMenuTrigger className="p-[4px] flex items-center gap-1 rounded-sm border hover:bg-muted transition-all">
         <p className="text-xs font-semibold">{user.name}</p>
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
