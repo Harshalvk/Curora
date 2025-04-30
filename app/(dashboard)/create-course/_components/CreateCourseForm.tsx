@@ -84,14 +84,15 @@ const CreateCourseForm = () => {
         </AnimatePresence>
 
         <div className="flex items-center justify-center">
-          <Separator className="flex-[1]" />
-          <div className="mx-4 space-x-2">
+          <Separator className="flex-[1] hidden sm:block" />
+          <div className="mx-4 space-x-2 flex">
             <Button
               type="button"
               variant={"secondary"}
               onClick={() => {
                 form.setValue("units", [...form.watch("units"), ""]);
               }}
+              className="text-xs"
             >
               Add Unit <PlusCircle className="h-4 w-4 text-green-500" />
             </Button>
@@ -101,11 +102,12 @@ const CreateCourseForm = () => {
               onClick={() => {
                 form.setValue("units", [...form.watch("units").slice(0, -1)]);
               }}
+              className="text-xs"
             >
               Remove Unit <Trash className="h-4 w-4 text-red-500" />
             </Button>
           </div>
-          <Separator className="flex-[1]" />
+          <Separator className="flex-[1] hidden sm:block" />
         </div>
         <Button
           type="submit"
