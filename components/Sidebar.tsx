@@ -28,12 +28,14 @@ const NavLinks = ({ onClick }: { onClick?: () => void }) => {
           key={route.href}
           href={`/${route.href}`}
           onClick={onClick}
-          className={`flex items-center gap-2 px-2 py-1 rounded-md hover:bg-muted transition ${
-            pathname.includes(route.href) ? "bg-muted font-semibold" : ""
+          className={`flex items-center gap-2 px-2 py-1 rounded-sm hover:bg-muted transition ${
+            pathname.includes(route.href)
+              ? "dark:bg-zinc-900 bg-zinc-100 font-semibold"
+              : ""
           }`}
         >
-          <route.icon size={20} />
-          {route.label}
+          <route.icon size={15} />
+          <p className="text-[14px]">{route.label}</p>
         </Link>
       ))}
     </div>
@@ -50,14 +52,13 @@ const Sidebar = () => {
           variant="ghost"
           size="icon"
           onClick={() => setIsMobileOpen(true)}
-          className={`${isMobileOpen && "hidden"}`}
         >
           <MenuIcon />
         </Button>
       </div>
 
       <div
-        className={`absolute inset-y-0 left-0 z-50 w-64 bg-primary/10 dark:bg-secondary shadow-md transform transition-transform duration-300 md:hidden ${
+        className={`absolute inset-y-0 left-0 z-50 w-64 shadow-md transform transition-transform duration-300 md:hidde border-r bg-white dark:bg-zinc-950 ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -73,7 +74,7 @@ const Sidebar = () => {
         <NavLinks onClick={() => setIsMobileOpen(false)} />
       </div>
 
-      <div className="hidden md:block min-w-[200px] max-w-[200px] h-full bg-primary/10 dark:bg-secondary/30  border-r">
+      <div className="hidden md:block min-w-[200px] max-w-[200px] h-full border-r">
         <NavLinks />
       </div>
     </div>
