@@ -13,12 +13,14 @@ interface OutputFormat {
 
 export const singleUnit = z.object({
   title: z.string(),
-  chapters: z.array(
-    z.object({
-      youtube_search_query: z.string(),
-      chapter_title: z.string(),
-    })
-  ).max(3),
+  chapters: z
+    .array(
+      z.object({
+        youtube_search_query: z.string(),
+        chapter_title: z.string(),
+      })
+    )
+    .max(3),
 });
 
 export const modelResponse = z.array(singleUnit);
@@ -72,13 +74,10 @@ export async function strict_output(
       response_format: zodResponseFormat(modelResponse, "res"),
     });
 
-    console.log("@@REPONSE--1", response);
-
     let res = response.choices;
 
     try {
-      console.log("@@REPONSE--2", response);
-      return res;
+      return res[0].message.parsed;
     } catch (e: any) {
       error_msg = `\n\nResult returned by model:\n${res}\n\nError parsing JSON:\n${e.message}`;
       if (verbose) {
