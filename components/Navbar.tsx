@@ -9,7 +9,7 @@ const Navbar = async () => {
   const user = session?.user;
 
   if (!user) {
-    return <p>User not found</p>;
+    return <p className="border-b">User not found</p>;
   }
 
   return (
