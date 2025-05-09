@@ -22,9 +22,11 @@ type Props = {
 export function UserToogle({ user }: Props) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p-[4px] flex items-center gap-1 rounded-sm border hover:bg-muted transition-all">
-        <p className="text-xs font-semibold">{user.name}</p>
-        <UserAvatar user={user} />
+      <DropdownMenuTrigger className="pl-1 flex items-center gap-1 rounded-sm border hover:bg-muted transition-all">
+        <div className="h-full flex items-center gap-1">
+          <p className="text-xs font-semibold">{user.name}</p>
+          <UserAvatar user={user} />
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white dark:bg-zinc-950" align="end">
         <div className="flex items-center justify-start gap-2 p-2">
@@ -60,13 +62,14 @@ function UserAvatar({ user }: Props) {
   return (
     <Avatar>
       {user.image ? (
-        <div className="w-full h-full aspect-square">
+        <div className="w-full h-full flex items-center justify-center">
           <Image
             src={user.image}
             alt={"user profile"}
             height={40}
             width={40}
             referrerPolicy="no-referrer"
+            className="h-6 w-6 rounded-full"
           />
         </div>
       ) : (
