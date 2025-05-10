@@ -1,4 +1,5 @@
 import { modelResponse, strict_output } from "@/lib/gpt";
+import { prisma } from "@/lib/prisma";
 import { CreateChapterSchema } from "@/schema/course";
 import { NextResponse } from "next/server";
 import { ZodError, z } from "zod";
@@ -7,7 +8,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { title, units } = CreateChapterSchema.parse(body);
-    console.log(body);
     type outputUnits = {
       title: string;
       chapters: {
@@ -24,12 +24,39 @@ export async function POST(req: Request) {
       {
         title: "title of the unit",
         chapters:
-          "an array of chapters, each chapter should have a youtube_search_query and a chapter_title key in the JSON object",
+          "an array of chapters, each chapter should have a youtube_search_query (youtube_search_query should be generalized) and a chapter_title key in the JSON object",
       }
     );
 
-    console.log("###OUTPUT", output_units);
-    return NextResponse.json(output_units);
+    const course = await prisma.course.create({
+      data: {
+        name: title,
+        image:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM02hBtyJJsIXGFNKO138kFX1JS_1OZro52Q&s",
+      },
+    });
+
+    for (const unit of output_units!) {
+      const title = unit.title;
+      const prismaUnit = await prisma.unit.create({
+        data: {
+          name: title,
+          courseId: course.id,
+        },
+      });
+      await prisma.chapter.createMany({
+        data: unit.chapters.map((chapter) => {
+          return {
+            name: chapter.chapter_title,
+            youtubeSearchQuery: chapter.youtube_search_query,
+            videoId: chapter.youtube_search_query,
+            unitId: prismaUnit.id,
+          };
+        }),
+      });
+    }
+
+    return NextResponse.json({ courseId: course.id }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return new NextResponse("invalid body", { status: 400 });
