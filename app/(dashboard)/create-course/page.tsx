@@ -1,7 +1,6 @@
 import React from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Info } from "lucide-react";
 import CreateCourseForm from "./_components/CreateCourseForm";
+import AlertMessage from "@/components/Alert";
 
 const CreateCourse = () => {
   return (
@@ -10,15 +9,12 @@ const CreateCourse = () => {
         Create Course
       </h1>
       <div className="max-w-4xl mx-auto">
-        <Alert className="max-w-fit">
-          <Info className="h-4 w-4" />
-          <AlertTitle>Important!</AlertTitle>
-          <AlertDescription>
-            Provide a course title or the topic you want to explore. Then, list
+        <AlertMessage
+          title="Important!"
+          description="Provide a course title or the topic you want to explore. Then, list
             the units detailing what you want to learn. Our AI will create a
-            tailored course for you!
-          </AlertDescription>
-        </Alert>
+            tailored course for you!"
+        />
         <div className="mt-3 border p-4 rounded-md">
           <CreateCourseForm />
         </div>
