@@ -2,6 +2,7 @@
 
 import {
   CoinsIcon,
+  FolderOpen,
   HomeIcon,
   Layers2Icon,
   MenuIcon,
@@ -16,13 +17,14 @@ import { usePathname } from "next/navigation";
 const routes = [
   { href: "home", label: "Home", icon: HomeIcon },
   { href: "create-course", label: "Create course", icon: Layers2Icon },
+  { href: "courses", label: "My courses", icon: FolderOpen },
 ];
 
 const NavLinks = ({ onClick }: { onClick?: () => void }) => {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col p-2 gap-2">
+    <div className="flex flex-col p-2 gap-1">
       {routes.map((route) => (
         <Link
           key={route.href}
