@@ -16,10 +16,43 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { PlusCircle, Trash } from "lucide-react";
+import { Loader, PlusCircle, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+type InputT = z.infer<typeof CreateChapterSchema>;
 
 const CreateCourseForm = () => {
+  const router = useRouter();
+  const { mutate: CreateChapters, isLoading } = useMutation({
+    mutationFn: async ({ title, units }: InputT) => {
+      const response = await fetch("/api/course/create-chapters", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, units }),
+      });
+      const parsedRes = await response.json();
+      return parsedRes;
+    },
+    onMutate: () => {
+      toast.loading("Creating course...", { id: "create-course" });
+    },
+    onSuccess: ({ courseId }) => {
+      toast.success("Course created!", { id: "create-course" });
+      router.push(`/create-course/${courseId}`);
+    },
+    onError: () => {
+      toast.error("Course not created", {
+        description: "Something went wrong. Please try again later",
+        id: "create-course",
+      });
+    },
+  });
+
   const form = useForm<z.infer<typeof CreateChapterSchema>>({
     resolver: zodResolver(CreateChapterSchema),
     defaultValues: {
@@ -29,7 +62,12 @@ const CreateCourseForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof CreateChapterSchema>) {
-    console.log(values);
+    if (values.units.some((unit) => unit === "")) {
+      toast.error("Error", {
+        description: "Please fill all the units",
+      });
+    }
+    CreateChapters(values);
   }
 
   return (
@@ -43,6 +81,7 @@ const CreateCourseForm = () => {
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input
+                  disabled={isLoading}
                   placeholder="Enter the main topci of the course (e.g. 'Calculus')"
                   {...field}
                 />
@@ -71,6 +110,7 @@ const CreateCourseForm = () => {
                     <FormLabel>Unit {index + 1}</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         placeholder="Enter the subtopic of the course"
                         {...field}
                       />
@@ -87,6 +127,7 @@ const CreateCourseForm = () => {
           <Separator className="flex-[1] hidden sm:block" />
           <div className="mx-4 space-x-2 flex">
             <Button
+              disabled={isLoading}
               type="button"
               variant={"secondary"}
               onClick={() => {
@@ -97,6 +138,7 @@ const CreateCourseForm = () => {
               Add Unit <PlusCircle className="h-4 w-4 text-green-500" />
             </Button>
             <Button
+              disabled={isLoading}
               type="button"
               variant={"secondary"}
               onClick={() => {
@@ -112,8 +154,10 @@ const CreateCourseForm = () => {
         <Button
           type="submit"
           variant={"secondary"}
+          disabled={isLoading}
           className="border w-full md:w-fit"
         >
+          {isLoading && <Loader className="w-3 h-3 animate-spin" />}
           Let&apos;s go!
         </Button>
       </form>
