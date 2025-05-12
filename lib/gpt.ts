@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { z } from "zod";
-import { zodResponseFormat, zodTextFormat } from "openai/helpers/zod";
+import { zodResponseFormat } from "openai/helpers/zod";
 
 const openai = new OpenAI({
   baseURL: "http://localhost:11434/v1",
@@ -11,24 +11,11 @@ interface OutputFormat {
   [key: string]: string | string[] | OutputFormat;
 }
 
-export const singleUnit = z.object({
-  title: z.string(),
-  chapters: z
-    .array(
-      z.object({
-        youtube_search_query: z.string(),
-        chapter_title: z.string(),
-      })
-    )
-    .max(3),
-});
-
-export const modelResponse = z.array(singleUnit);
-
-export async function strict_output(
+export async function strict_output<Schema extends z.ZodTypeAny>(
   system_prompt: string,
   user_prompt: string | string[],
   output_format: OutputFormat,
+  output_type: Schema,
   default_category: string = "",
   output_value_only: boolean = false,
   model: string = "llama3.2:1b",
@@ -71,7 +58,7 @@ export async function strict_output(
         },
         { role: "user", content: user_prompt.toString() },
       ],
-      response_format: zodResponseFormat(modelResponse, "res"),
+      response_format: zodResponseFormat(output_type, "res"),
     });
 
     let res = response.choices;
