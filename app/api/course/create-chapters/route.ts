@@ -1,4 +1,4 @@
-import { modelResponse, strict_output } from "@/lib/gpt";
+import { strict_output } from "@/lib/gpt";
 import { prisma } from "@/lib/prisma";
 import { CreateChapterSchema } from "@/schema/course";
 import { NextResponse } from "next/server";
@@ -8,13 +8,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { title, units } = CreateChapterSchema.parse(body);
-    type outputUnits = {
-      title: string;
-      chapters: {
-        youtube_search_query: string;
-        chapter_title: string;
-      }[];
-    };
 
     let output_units = await strict_output(
       "You are an AI capable of curating course content, coming up with relevant chapter titles, and findind relevant youtube for each chapter. YOU HAVE STRICT INSTRUCTION TO GIVE YOUR OUTPUT IN ONLY JSON OBJECT DO NOT ADD ANY INTRODUCTION FOR EXPLANATIONS FOR YOUR RESPONSE JUST STRICT JSON OBJECT. Make user your response should contain an entry for unit given by user.",
@@ -25,7 +18,20 @@ export async function POST(req: Request) {
         title: "title of the unit",
         chapters:
           "an array of chapters, each chapter should have a youtube_search_query (youtube_search_query should be generalized) and a chapter_title key in the JSON object",
-      }
+      },
+      z.array(
+        z.object({
+          title: z.string(),
+          chapters: z
+            .array(
+              z.object({
+                youtube_search_query: z.string(),
+                chapter_title: z.string(),
+              })
+            )
+            .max(3),
+        })
+      )
     );
 
     const course = await prisma.course.create({
