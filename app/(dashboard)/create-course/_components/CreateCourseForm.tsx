@@ -43,7 +43,7 @@ const CreateCourseForm = () => {
     },
     onSuccess: ({ courseId }) => {
       toast.success("Course created!", { id: "create-course" });
-      router.push(`/create-course/${courseId}`);
+      router.push(`/courses/${courseId}`);
     },
     onError: () => {
       toast.error("Course not created", {
