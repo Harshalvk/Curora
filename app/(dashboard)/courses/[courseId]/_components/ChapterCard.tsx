@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Chapter } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import {
   useState,
   forwardRef,
@@ -38,14 +38,13 @@ const ChapterCard = forwardRef<ChapterCardHandler, Props>(
         });
         return await response.json();
       },
-      onMutate: () => {},
       onSuccess: () => {
         setSuccess(true);
         addChapterIdToSet();
         toast.success("Success");
       },
       onError: (error) => {
-        console.log(error);
+        console.error(error);
         setSuccess(false);
         toast.error("Error", {
           description: "There is an error loading your chapter.",
@@ -53,13 +52,6 @@ const ChapterCard = forwardRef<ChapterCardHandler, Props>(
         addChapterIdToSet();
       },
     });
-
-    useEffect(() => {
-      if (chapter.videoId) {
-        setSuccess(true);
-        addChapterIdToSet();
-      }
-    }, [chapter]);
 
     const addChapterIdToSet = useCallback(() => {
       setCompletedChapters((prev) => {
@@ -69,9 +61,17 @@ const ChapterCard = forwardRef<ChapterCardHandler, Props>(
       });
     }, [chapter.id, completedChapters, setCompletedChapters]);
 
+    useEffect(() => {
+      if (chapter.videoId) {
+        setSuccess(true);
+        addChapterIdToSet();
+      }
+    }, [chapter, addChapterIdToSet]);
+
     useImperativeHandle(ref, () => ({
       async triggerLoad() {
         if (chapter.videoId) {
+          setSuccess(true);
           addChapterIdToSet();
           return;
         }
@@ -88,9 +88,15 @@ const ChapterCard = forwardRef<ChapterCardHandler, Props>(
           "bg-green-500/10": success === true,
         })}
       >
-        <span className="text-muted-foreground">{chapterIdx + 1}.</span>{" "}
-        {chapter.name}
-        {isLoading && <Loader2 className="animate-spin transition-all" />}
+        <div className="flex justify-between">
+          <div>
+            <span className="text-muted-foreground">{chapterIdx + 1}.</span>{" "}
+            {chapter.name}
+          </div>
+          {isLoading && (
+            <Loader className="animate-spin transition-all size-4 self-center" />
+          )}
+        </div>
       </div>
     );
   }
