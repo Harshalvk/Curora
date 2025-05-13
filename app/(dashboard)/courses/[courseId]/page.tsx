@@ -34,7 +34,7 @@ const CoursePage = async ({ params }: Props) => {
   });
 
   if (!course) {
-    return redirect("/create");
+    return redirect("/create-course");
   }
 
   return (
