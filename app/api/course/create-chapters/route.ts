@@ -55,7 +55,6 @@ export async function POST(req: Request) {
           return {
             name: chapter.chapter_title,
             youtubeSearchQuery: chapter.youtube_search_query,
-            videoId: chapter.youtube_search_query,
             unitId: prismaUnit.id,
           };
         }),
