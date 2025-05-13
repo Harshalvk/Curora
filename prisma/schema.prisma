@@ -103,7 +103,7 @@ model Chapter {
   unitId             String
   name               String
   youtubeSearchQuery String
-  videoId            String
+  videoId            String?
   summary            String?    @db.VarChar(3000)
   questions          Question[]
 
