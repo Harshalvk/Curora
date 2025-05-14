@@ -68,7 +68,7 @@ const ConfirmChapters = ({ course }: Props) => {
           </Button>
           {totalChaptersCount === completedChapters.size ? (
             <Button asChild className="group" variant={"outline"}>
-              <Link href={`/course/${course.id}/0/0`}>
+              <Link href={`/courses/${course.id}/0/0`}>
                 Save & Continue{" "}
                 <ArrowRight className="-translate-x-0.5 group-hover:translate-x-0.5 transition-transform" />
               </Link>
