@@ -51,24 +51,26 @@ export async function getQuestionsFromTranscript(
   };
 
   const questions: Question[] | null = await strict_output(
-    "You are a helpful AI that is able to generate mcq questions and answers, the length of each answer should not be more than 15 words",
+    "You are a helpful and expert educational AI. Generate challenging multiple-choice questions (MCQs) based on the provided transcript.",
     new Array(5).fill(
-      `You are to generate a randomo hard mcq question about ${courseTitle} with context of the following transcript: ${transcript}`
+      `Create one difficult MCQ related to the course "${courseTitle}", using this transcript as context:\n\n${transcript}\n\nEach answer option should be short and relevant.`
     ),
     {
-      question: "question",
-      answer: "answer with max length of 15 words",
-      option1: "option1 with max length of 15 words",
-      option2: "option2 with max length of 15 words",
-      option3: "option3 with max length of 15 words",
+      question: "A clear and concise question related to the topic.",
+      option1: "First answer option (max 10 words).",
+      option2: "Second answer option (max 10 words).",
+      option3: "Third answer option (max 10 words).",
+      option4: "Fourth answer option (max 10 words).",
+      answer: "The correct answer, matching exactly one of the above options.",
     },
     z.array(
       z.object({
-        question: z.string(),
+        question: z.string().max(200),
+        option1: z.string().max(10),
+        option2: z.string().max(10),
+        option3: z.string().max(10),
+        option4: z.string().max(10),
         answer: z.string(),
-        option1: z.string(),
-        option2: z.string(),
-        option3: z.string(),
       })
     )
   );
