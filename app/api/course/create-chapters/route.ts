@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { strict_output } from "@/lib/gpt";
 import { prisma } from "@/lib/prisma";
 import { CreateChapterSchema } from "@/schema/course";
@@ -8,6 +9,22 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { title, units } = CreateChapterSchema.parse(body);
+
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json(
+        { success: false, msg: "User not found" },
+        { status: 403 }
+      );
+    }
+
+    if (!session.user) {
+      return NextResponse.json(
+        { success: false, msg: "User not found" },
+        { status: 403 }
+      );
+    }
 
     let output_units = await strict_output(
       "You are an AI capable of curating course content, coming up with relevant chapter titles, and findind relevant youtube for each chapter. YOU HAVE STRICT INSTRUCTION TO GIVE YOUR OUTPUT IN ONLY JSON OBJECT DO NOT ADD ANY INTRODUCTION FOR EXPLANATIONS FOR YOUR RESPONSE JUST STRICT JSON OBJECT. Make user your response should contain an entry for unit given by user.",
@@ -39,6 +56,7 @@ export async function POST(req: Request) {
         name: title,
         image:
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM02hBtyJJsIXGFNKO138kFX1JS_1OZro52Q&s",
+        userId: session.user.id as string,
       },
     });
 
