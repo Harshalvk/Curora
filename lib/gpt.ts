@@ -18,7 +18,7 @@ export async function strict_output<Schema extends z.ZodTypeAny>(
   output_type: Schema,
   default_category: string = "",
   output_value_only: boolean = false,
-  model: string = "llama3.2:1b",
+  model: string = "mistral",
   temperature: number = 1,
   num_tries: number = 3,
   verbose: boolean = false
