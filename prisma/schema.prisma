@@ -21,6 +21,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Course    Course[]
 }
 
 model Account {
@@ -80,10 +81,13 @@ model Authenticator {
 
 //course contains many units
 model Course {
-  id    String @id @default(cuid())
-  name  String
-  image String
-  units Unit[]
+  id     String @id @default(cuid())
+  name   String
+  image  String
+  units  Unit[]
+  userId String
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 //units contains many chanpters
