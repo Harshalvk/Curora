@@ -82,7 +82,7 @@ const CreateCourseForm = () => {
               <FormControl>
                 <Input
                   disabled={isLoading}
-                  placeholder="Enter the main topci of the course (e.g. 'Calculus')"
+                  placeholder="Enter the main topic of the course (e.g. 'Calculus')"
                   {...field}
                 />
               </FormControl>
