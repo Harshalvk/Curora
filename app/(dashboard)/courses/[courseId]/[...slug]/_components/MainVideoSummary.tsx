@@ -22,16 +22,18 @@ const MainVideoSummary = ({
         Unit {unitIndex + 1} &bull; Chapter {chapterIndex + 1}
       </h4>
       <h1 className="font-bold text-xl">{chapter.name}</h1>
-      <iframe
-        title="chapter video"
-        className="w-full mt-4 aspect-video max-h-[24rem] rounded-md"
-        src={`https://www.youtube.com/embed/${chapter.videoId}`}
-        allowFullScreen
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      />
-      <div className="mt-4">
-        <h3 className="text-2xl font-semibold mb-1">Summary</h3>
-        <p className="text-justify leading-5">{chapter.summary}</p>
+      <div className="w-full grid 2xl:grid-cols-3 gap-2">
+        <iframe
+          title="chapter video"
+          className="w-full col-span-2 mt-4 aspect-video max-h-[24rem] rounded-md"
+          src={`https://www.youtube.com/embed/${chapter.videoId}`}
+          allowFullScreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        />
+        <div className="mt-4">
+          <h3 className="text-2xl font-semibold mb-1">Summary</h3>
+          <p className="text-justify leading-5">{chapter.summary}</p>
+        </div>
       </div>
     </div>
   );
