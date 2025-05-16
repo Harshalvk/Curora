@@ -55,18 +55,19 @@ const ChapterCard = forwardRef<ChapterCardHandler, Props>(
 
     const addChapterIdToSet = useCallback(() => {
       setCompletedChapters((prev) => {
+        if (prev.has(chapter.id)) return prev;
         const newSet = new Set(prev);
         newSet.add(chapter.id);
         return newSet;
       });
-    }, [chapter.id, completedChapters, setCompletedChapters]);
+    }, [chapter.id, setCompletedChapters]);
 
     useEffect(() => {
       if (chapter.videoId) {
         setSuccess(true);
         addChapterIdToSet();
       }
-    }, [chapter, addChapterIdToSet]);
+    }, [chapter.id, chapter.videoId, addChapterIdToSet]);
 
     useImperativeHandle(ref, () => ({
       async triggerLoad() {
