@@ -4,7 +4,7 @@ import { Chapter, Course, Unit } from "@prisma/client";
 import React, { useMemo, useState } from "react";
 import ChapterCard, { ChapterCardHandler } from "./ChapterCard";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Loader } from "lucide-react";
 import Link from "next/link";
 
@@ -62,17 +62,28 @@ const ConfirmChapters = ({ course }: Props) => {
       <div className="flex items-center justify-center my-2">
         <Separator className="flex-[1] hidden sm:block" />
         <div className="mx-4 space-x-2 flex">
-          <Button type="button" variant={"secondary"} className="text-xs group">
+          <Link
+          className={buttonVariants({
+              variant: "secondary",
+              className: "text-xs group",
+            })}
+            href={"/courses"}
+            onClick={() => console.log("clicked")}
+          >
             <ArrowLeft className="translate-x-0.5 group-hover:-translate-x-0.5 transition-transform" />
             Back
-          </Button>
+          </Link>
           {totalChaptersCount === completedChapters.size ? (
-            <Button asChild className="group" variant={"outline"}>
-              <Link href={`/courses/${course.id}/0/0`}>
-                Save & Continue{" "}
-                <ArrowRight className="-translate-x-0.5 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-            </Button>
+            <Link
+              href={`/courses/${course.id}/0/0`}
+              className={buttonVariants({
+                variant: "outline",
+                className: "group select-none",
+              })}
+            >
+              Save & Continue{" "}
+              <ArrowRight className="-translate-x-0.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           ) : (
             <Button
               type="button"
