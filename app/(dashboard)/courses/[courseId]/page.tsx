@@ -38,8 +38,8 @@ const CoursePage = async ({ params }: Props) => {
   }
 
   return (
-    <div className="p-4">
-      <div>
+    <div>
+      <div className="sticky top-0 z-10 border-b px-4 pb-2 backdrop-blur-lg">
         <span className="text-muted-foreground text-sm">Course name</span>
         <h1 className="capitalize font-bold text-xl sm:text-2xl leading-5">
           {course.name}
@@ -51,6 +51,7 @@ const CoursePage = async ({ params }: Props) => {
           description="Below are the generated chapters for each of your units. Look over them & then click on the button to confirm and continue."
         />
         <ConfirmChapters course={course} />
+        <div className="mb-4" />
       </div>
     </div>
   );
