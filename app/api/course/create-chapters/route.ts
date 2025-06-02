@@ -54,8 +54,6 @@ export async function POST(req: Request) {
     const course = await prisma.course.create({
       data: {
         name: title,
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM02hBtyJJsIXGFNKO138kFX1JS_1OZro52Q&s",
         userId: session.user.id as string,
       },
     });
