@@ -81,11 +81,11 @@ model Authenticator {
 
 //course contains many units
 model Course {
-  id     String @id @default(cuid())
-  name   String
-  image  String
-  units  Unit[]
-  userId String
+  id        String   @id @default(cuid())
+  name      String
+  units     Unit[]
+  userId    String
+  createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
 }
