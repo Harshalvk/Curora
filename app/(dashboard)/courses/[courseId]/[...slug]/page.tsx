@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/prisma";
-import { useQuery } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 import React from "react";
 import CourseSidebar from "./_components/CourseSidebar";
@@ -7,6 +5,7 @@ import MainVideoSummary from "./_components/MainVideoSummary";
 import QuizCards from "./_components/QuizCards";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { GetCourseById } from "@/actions/courese/getCourseById";
 
 type Props = {
   params: {
@@ -19,22 +18,7 @@ const CoursePage = async ({ params }: Props) => {
   await params;
   const [unitIndexParam, chapterIndexParam] = params.slug;
 
-  const course = await prisma.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
-    include: {
-      units: {
-        include: {
-          chapters: {
-            include: {
-              questions: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const { course, success } = await GetCourseById(params.courseId);
 
   if (!course) {
     return redirect("/courses");
