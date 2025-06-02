@@ -45,7 +45,7 @@ const CoursePage = async ({ params }: Props) => {
           {course.name}
         </h1>
       </div>
-      <div className="max-w-4xl mx-auto mt-4">
+      <div className="max-w-4xl mx-auto mt-4 p-4">
         <AlertMessage
           title="Important!"
           description="Below are the generated chapters for each of your units. Look over them & then click on the button to confirm and continue."
