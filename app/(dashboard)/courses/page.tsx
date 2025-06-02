@@ -1,44 +1,74 @@
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { GetUserCoureses } from "@/actions/courese/getUsersCourses";
+import { ArrowRight, FolderOpen } from "lucide-react";
+import { Course, Unit } from "@prisma/client";
 
 const Courses = async () => {
   const session = await auth();
 
   if (!session?.user) {
-    return <p>User not found</p>;
+    redirect("/signgin");
   }
 
-  const courses = await prisma.course.findMany({
-    where: {
-      userId: session.user.id,
-    },
-  });
+  const { courses, success } = await GetUserCoureses();
+
+  console.log(courses);
+
+  if (!success || !courses || courses.length === 0) {
+    return (
+      <div className="w-full h-1/2 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-2 text-muted-foreground">
+          <div className="border-3 p-4 rounded-full ">
+            <FolderOpen className="w-8 h-8 text-muted-foreground" />
+          </div>
+          <h1 className=" text-xl font-semibold">No Coureses found</h1>
+          <p>Please create one</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full p-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-      {courses.map((course) => (
-        <Link href={`/courses/${course.id}/0/0`} key={course.id}>
-          <div className="w-full h-48 overflow-hidden rounded-md relative group">
-            <Image
-              src={course.image}
-              alt="Coures image"
-              height={100}
-              width={100}
-              className="w-full h-full object-cover brightness-75 scale-105 group-hover:scale-100 transition-all group-hover:grayscale"
-            />
-            <div className="w-full absolute top-1/2 text-center">
-              <p className="font-semibold text-xl text-shadow-lg select-none">
-                {course.name}
-              </p>
-            </div>
-          </div>
-        </Link>
-      ))}
+      <CouresCard courses={courses} />
     </div>
   );
 };
+
+function CouresCard({ courses }: { courses: (Course & { units: Unit[] })[] }) {
+  return (
+    <>
+      {courses?.map((course) => (
+        <Link
+          href={`/courses/${course.id}/0/0`}
+          key={course.id}
+          className="hover:bg-muted-foreground/3 transition-colors rounded-md border group"
+        >
+          <div className="w-full p-3 rounded-md">
+            <div className="w-full flex justify-between">
+              <p className="font-semibold text-xl select-none mb-2">
+                {course.name}
+              </p>
+              <ArrowRight className="w-4 h-4 group-hover:-rotate-45 transition-all text-muted-foreground group-hover:text-white" />
+            </div>
+
+            {course.units.map((unit) => (
+              <p
+                key={unit.id}
+                className="text-sm text-muted-foreground hover:underline underline-offset-2"
+              >
+                {unit.name}
+              </p>
+            ))}
+          </div>
+        </Link>
+      ))}
+    </>
+  );
+}
 
 export default Courses;
