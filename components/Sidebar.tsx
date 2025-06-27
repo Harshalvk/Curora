@@ -4,9 +4,9 @@ import {
   CoinsIcon,
   FolderOpen,
   HomeIcon,
+  Key,
   Layers2Icon,
   MenuIcon,
-  ShieldCheckIcon,
   XIcon,
 } from "lucide-react";
 import React, { useState } from "react";
@@ -18,6 +18,7 @@ const routes = [
   { href: "home", label: "Home", icon: HomeIcon },
   { href: "create-course", label: "Create course", icon: Layers2Icon },
   { href: "courses", label: "My courses", icon: FolderOpen },
+  { href: "api-key", label: "Api Key", icon: Key },
 ];
 
 const NavLinks = ({ onClick }: { onClick?: () => void }) => {
