@@ -16,8 +16,6 @@ const Courses = async () => {
 
   const { courses, success } = await GetUserCoureses();
 
-  console.log(courses);
-
   if (!success || !courses || courses.length === 0) {
     return (
       <div className="w-full h-1/2 flex items-center justify-center">
